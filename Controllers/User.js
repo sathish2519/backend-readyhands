@@ -3,6 +3,7 @@ const serviceprovider = require('../Models/serviceModel')
 const appointmentmodel = require('../Models/appointmentModel');
 const Jwt = require("jsonwebtoken")
 const bcrypt = require('bcrypt');
+const moment = require('moment/moment');
 
 
 exports.Create = async (req, res) => {
@@ -167,6 +168,8 @@ exports.getAllaprovedServiceProviders = async (req, res) => {
 exports.bookappointment = async (req, res) => {
     try {
         req.body.status = "pending"
+        req.body.date=moment(req.body.date,'DD-MM-YYYY').toISOString();
+        req.body.selectedtime=moment(req.body.selectedtime,'HH:mm').toISOString();
         const newappointment = new appointmentmodel(req.body)
         await newappointment.save()
         res.status(200).send({ message: "Your appointment is booked", success: true, data: newappointment })
@@ -180,6 +183,31 @@ exports.bookappointment = async (req, res) => {
         )
         await user.save();
 
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({ message: "Something Went Wrong from Db", success: false })
+    }
+}
+
+exports.checkavailability = async (req, res) => {
+    try {
+        const date=moment(req.body.date,'DD-MM-YYYY').toISOString();
+        const fromTime=moment(req.body.selectedtime,'HH:mm').subtract(1,'hours').toISOString()
+        const toTime=moment(req.body.selectedtime,'HH:mm').add(1,'hours').toISOString()
+        const provider=req.body.providerId;
+        const appointment=await  appointmentmodel.find({
+            provider,
+            date,
+            selectedtime:{ $gte:fromTime, $lte:toTime}
+
+        });
+        if (appointment.length>0){
+            return res.status(200).send({message: 'Appointments not available',success:false,
+        });
+    }else{
+        return res.status(200).send({message: 'Appointments available',success:true
+        });
+    }
     } catch (error) {
         console.log(error)
         return res.status(500).send({ message: "Something Went Wrong from Db", success: false })
