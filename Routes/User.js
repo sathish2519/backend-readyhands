@@ -1,5 +1,5 @@
 const express= require('express');
-const { Create, verifyEmail,resendEmailverification,Login, ProtectedRoute, ServiceProvider, MarkAllAsSeen, deleteall, getAllaprovedServiceProviders, bookappointment, checkavailability } = require('../Controllers/User');
+const { Create, verifyEmail,resendEmailverification,Login, ProtectedRoute, ServiceProvider, MarkAllAsSeen, deleteall, getAllaprovedServiceProviders, bookappointment, checkavailability, getAllAppointments } = require('../Controllers/User');
 const { userValidator, validate, ProtectedRoutValidate } = require('../Middleware/Validator');
 
 const router=express.Router()
@@ -12,4 +12,5 @@ router.post('/delete-all',ProtectedRoutValidate,deleteall)
 router.get('/get-all-approved-providers',ProtectedRoutValidate,getAllaprovedServiceProviders)
 router.post('/bookappointment',ProtectedRoutValidate,bookappointment)
 router.post('/check-booking-availability',ProtectedRoutValidate,checkavailability)
+router.get('/get-all-appointments',ProtectedRoutValidate,getAllAppointments)
 module.exports=router;

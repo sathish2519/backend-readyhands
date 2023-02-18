@@ -213,3 +213,14 @@ exports.checkavailability = async (req, res) => {
         return res.status(500).send({ message: "Something Went Wrong from Db", success: false })
     }
 }
+
+
+exports.getAllAppointments = async (req, res) => {
+    try {
+        const appointments=await appointmentmodel.find({userId:req.body.userId});
+        return res.status(200).send({ message: "Appointments Fetched Successfully", success: true, data: appointments })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({ message: "Something Went Wrong", success: false })
+    }
+}
