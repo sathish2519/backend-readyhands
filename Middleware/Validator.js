@@ -6,7 +6,7 @@ exports.userValidator = [
     check("name").trim().not().isEmpty().withMessage("Name Field Missing"),
     check("email").normalizeEmail().isEmail().withMessage("Enter a Valid Email Address"),
     check("password").trim().not().isEmpty().withMessage("Password Field is Empty")
-    .isLength({ min: 8, max: 20 }).withMessage("Password Must be 8 to 20 Chaarcters Long")
+    .isLength({ min: 6, max: 20 }).withMessage("Password Must be 8 to 20 Chaarcters Long")
 
 ];
 
