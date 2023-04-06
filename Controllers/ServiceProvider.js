@@ -57,7 +57,7 @@ exports.changeappointmentstatus = async (req, res) => {
         const UnseenNotification = users.UnseenNotification;
         UnseenNotification.push({
             type: "appointment-status-changed",
-            message: `Your appointment account has been ${status}`,
+            message: `Your appointment has been ${status}`,
             onClickPath: "/appointments",
         });
         // users.isServiceProvider = status === "approved" ? true : false;

@@ -38,7 +38,6 @@ exports.changestatus = async (req, res) => {
         await users.save();
         res.status(200).send({ message: "Service Provider Status Updated Successfully", success: true, data: Providers })
 
-
     } catch (error) {
         console.log(error)
         return res.status(500).send({ message: "Something Went Wrong", success: false })

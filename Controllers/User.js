@@ -152,7 +152,7 @@ exports.deleteall = async (req, res) => {
 }
 
 
-//api call for fetchong all approved doctors
+//api call for fetchong all approved providers
 exports.getAllaprovedServiceProviders = async (req, res) => {
     try {
         const serviceProviders=await serviceprovider.find({status: 'approved'});
@@ -178,7 +178,7 @@ exports.bookappointment = async (req, res) => {
             {
                 type: "New appointment request",
                 message: ` A new appointment request from ${req.body.userinfo.name}`,
-                onClickPath: "/serviceprovider/appointments"
+                onClickPath: "/appointments/providers"
             }
         )
         await user.save();
@@ -219,6 +219,24 @@ exports.getAllAppointments = async (req, res) => {
     try {
         const appointments=await appointmentmodel.find({userId:req.body.userId});
         return res.status(200).send({ message: "Appointments Fetched Successfully", success: true, data: appointments })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({ message: "Something Went Wrong", success: false })
+    }
+}
+
+
+exports.getServiceProviders = async (req, res) => {
+    try {
+        const service = req.params.service;
+        const Providers = await serviceprovider.find({
+            $and: [
+              { status: 'approved' },
+              { specialization: service }
+            ]
+          });
+          return res.status(200).send({ message: "Service Providers Fetched Successfully", success: true, data: Providers })
+        //   This query will return all service providers where status equals "approved" and specialization equals the selected service.
     } catch (error) {
         console.log(error)
         return res.status(500).send({ message: "Something Went Wrong", success: false })
